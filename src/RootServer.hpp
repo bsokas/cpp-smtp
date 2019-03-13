@@ -4,24 +4,28 @@
 #include <stdio.h>
 #include <netinet/in.h>
 
-#define DEFAULT_PORT 8080
-
 class RootServer {
   std::string serverName;
-  int port, socketfd;
+  int port, socketfd, numWritten;
   bool isStream;
+  char buffer[256]; //for reading content in
+  struct sockaddr_in serverAddress;
+  struct hostent *caller;
 
 public:
   //RootServer constructor
-  RootServer(){
-    port = DEFAULT_PORT;
+  RootServer(int &port){
+    this->port = port;
     isStream = true;
   };
 
-  //RootServer constructor w/ port and streamtype
-  RootServer(unsigned int port, bool &isStream){
-    this->port = port;
-    this->isStream = isStream;
-  };
+  char listen(){
+    socketfd = socket(AF_INET, SOCK_STREAM, 0); //(addr domain, stream type, protocol type TCP/UDP)
+    if (socketfd < 0){
+      std::cout<<"Error with socket connector. Closing program\n\n";
+      return -1;
+    }
 
+    return 0;
+  };
 };
