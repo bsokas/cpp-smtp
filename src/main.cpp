@@ -14,6 +14,7 @@ int main(int argc, char** argv){
 
   NetworkManager netman;
   netman.setPort(argv[1]);
+  netman.listen();
 
   return 0;
 }

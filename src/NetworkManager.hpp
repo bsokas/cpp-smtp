@@ -27,6 +27,10 @@ public:
     }
   };
 
+  void listen(){
+    root->startListener();
+  }
+
   // TODO fill destructor
   ~NetworkManager(){};
 
