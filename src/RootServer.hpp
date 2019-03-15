@@ -3,11 +3,12 @@
 #include <sys/socket.h>
 #include <stdio.h>
 #include <netinet/in.h>
+#include <thread>
+#include "Utilities/listener.hpp"
 
 class RootServer {
   std::string serverName;
   int port, socketfd, clientfd, numRead;
-  socklen_t clientSize;
   bool isStream;
   char buffer[256]; //for reading content in
   struct sockaddr_in serverAddress, clientAddress;
@@ -20,7 +21,16 @@ public:
     isStream = true;
   };
 
-  char startListener(){
+  void run(){
+    if (startServer() < 0) {
+      printf("Start server error.\n");
+      return;
+    };
+
+    listener();
+  }
+
+  char startServer(){
     socketfd = socket(AF_INET, SOCK_STREAM, 0); //(addr domain, stream type, protocol type TCP/UDP)
     if (socketfd < 0){
       printf("Error with socket connector. Closing program\n\n");
@@ -30,8 +40,6 @@ public:
     resetServer();
     if (bindSocket() < 0) return -1;
     listen(socketfd, 5);      //begin listening on provided port
-    acceptClient();
-    readIn();
 
     return 0;
   };
@@ -56,19 +64,17 @@ public:
     serverAddress.sin_addr.s_addr = INADDR_ANY;
   };
 
-  void acceptClient(){
-    clientSize = sizeof(clientAddress);
-    clientfd = accept(socketfd, (struct sockaddr *) &clientAddress, &clientSize);
-    if (clientfd < 0){
-      printf("ERROR on accept\n\n");
+  char listener() {
+    while(1){
+      struct sockaddr_in incoming;
+      socklen_t clientSize = sizeof(incoming);
+      int clientfd = accept(socketfd, (struct sockaddr *) &incoming, &clientSize);
+      if (clientfd < 0){
+        perror("Error accepting client request");
+      }
+
+      //TODO: run threaded request parser
+      parseRequest(clientfd);
     }
-  };
-
-  void readIn(){
-    bzero(buffer, 256);
-    std::string msg (buffer, 255);
-
-    printf("Reveived connection!\n");
-    printf("Here is the message: %s\n", msg.c_str());
   };
 };
