@@ -1,5 +1,6 @@
 #include <iostream>
-#include "NetworkManager.hpp"
+// #include "Networking/NetworkManager.hpp"
+#include "Networking/Components/NetworkState.cpp"
 
 int main(int argc, char** argv){
   std::cout<<"******Starting cpp-smtp server*****\n\n";
@@ -12,9 +13,10 @@ int main(int argc, char** argv){
     return -1;
   }
 
-  NetworkManager netman;
-  netman.setPort(argv[1]);
-  netman.listen();
+  static NetworkState *netstate = NetworkState::getInstance();
+  // NetworkManager netman;
+  // netman.setPort(argv[1]);
+  // netman.listen();
 
   return 0;
 }

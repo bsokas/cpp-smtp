@@ -32,6 +32,8 @@ public:
   }
 
   // TODO fill destructor
-  ~NetworkManager(){};
+  ~NetworkManager(){
+    delete root;
+  };
 
 };
