@@ -13,10 +13,12 @@ int main(int argc, char** argv){
     return -1;
   }
 
-  static NetworkState *netstate = NetworkState::getInstance();
-  // NetworkManager netman;
-  // netman.setPort(argv[1]);
-  // netman.listen();
+  NetworkState *netstate = NetworkState::getInstance();
+  std::string descriptors[3] = {"service1", "service2", "service3"};
+  for (int i = 0; i < 3; i++){
+  	netstate->obtainPort(descriptors[i]);
+  } 
+  netstate->print();
 
   return 0;
 }

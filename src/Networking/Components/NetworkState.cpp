@@ -9,13 +9,11 @@
 class NetworkState {
   //Singleton instance for maintaining network state
   static NetworkState *netstate;
-  static unsigned char created;
   int portavail;
   std::map<int, std::string> serviceMap;
   std::vector<int*> retiredPorts;
 
   NetworkState(){
-    created = 1;
     portavail = START_PORT;
   };
 
@@ -25,7 +23,7 @@ class NetworkState {
 
 public:
   static NetworkState* getInstance(){
-    if (created != 1) {
+    if (!netstate) {
       netstate = new NetworkState();
     }
     return netstate;
@@ -60,3 +58,5 @@ public:
   ~NetworkState(){}
 
 };
+
+NetworkState *NetworkState::netstate = 0;
