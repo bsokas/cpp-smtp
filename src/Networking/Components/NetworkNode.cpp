@@ -15,8 +15,6 @@ class NetworkNode {
   std::string serviceDescriptor;
   struct sockaddr_in serverAddress, clientAddress;
 
-  virtual
-
 protected:
   void resetServer(){
     bzero((char *)&serverAddress, sizeof(serverAddress)); //zero out the serverAddress
@@ -49,7 +47,7 @@ public:
   };
 
   //Virtual program-defined processor of input
-  virtual void processInput() {
+  void acceptConnection() {
       while(1) {
         struct sockaddr_in incoming;
         socklen_t reqSize = sizeof(incoming);
@@ -60,12 +58,15 @@ public:
           perror("ERROR attempting to connect client socket");
           continue;
         }
-        //process
+        //pass content to process function
+        processInput(clientfd);
       }
-  }
+  };
 
-  ~NetworkNode(){
-    netstate->retirePort(port);
+  virtual void processInput(int &clientfd) {};
+
+  virtual ~NetworkNode(){
+    // netstate->retirePort(port);
   };
 
 };
