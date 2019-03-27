@@ -15,6 +15,8 @@ class NetworkNode {
   std::string serviceDescriptor;
   struct sockaddr_in serverAddress, clientAddress;
 
+  virtual
+
 protected:
   void resetServer(){
     bzero((char *)&serverAddress, sizeof(serverAddress)); //zero out the serverAddress
@@ -45,6 +47,22 @@ public:
 
     listen(socketfd, 5); //start listening, set maxinum number of connections allowed while processing other req
   };
+
+  //Virtual program-defined processor of input
+  virtual void processInput() {
+      while(1) {
+        struct sockaddr_in incoming;
+        socklen_t reqSize = sizeof(incoming);
+
+        int clientfd = accept(socketfd, (struct sockaddr*) &incoming, &reqSize);
+        if (clientfd < 0) {
+          //ERROR
+          perror("ERROR attempting to connect client socket");
+          continue;
+        }
+        //process
+      }
+  }
 
   ~NetworkNode(){
     netstate->retirePort(port);
