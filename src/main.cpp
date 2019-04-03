@@ -6,6 +6,7 @@ int main(int argc, char** argv) {
 	std::cout<<"******Setting up cpp-smtp program*****\n\n";
 	// NetworkState::getInstance();
 	NetworkState *netstate = NetworkState::getInstance();
+	unsigned short int firstPort = netstate->getNetworkPort();
 	netstate->print();
 
 	return 0;
