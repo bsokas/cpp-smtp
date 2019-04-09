@@ -7,6 +7,8 @@ int main(int argc, char** argv) {
 	// NetworkState::getInstance();
 	NetworkState *netstate = NetworkState::getInstance();
 	unsigned short int firstPort = netstate->getNetworkPort();
+  printf("Application provided port %d\n\n", firstPort);
+
 	netstate->print();
 
 	return 0;

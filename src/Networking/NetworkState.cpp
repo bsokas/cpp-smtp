@@ -18,7 +18,9 @@ class NetworkState {
 		startPort = START_PORT;
 	};
 
-	~NetworkState(){};
+	~NetworkState(){
+		delete instance;
+	};
 
 public:
 	static NetworkState* getInstance(){
@@ -29,7 +31,11 @@ public:
 	};
 
 	unsigned short int getNetworkPort(std::string serviceDescriptor=""){
-		unsigned int newPort = startPort++;
+		unsigned int newPort = checkRetiredPorts();
+		if (newPort == 0){
+			newPort = startPort++;
+		}
+
 		if (serviceDescriptor.size() == 0) {
 			std::stringstream stream;
 			stream << "NO-ID-" << newPort;
@@ -49,7 +55,11 @@ public:
 		return oldPort;
 	}
 
-	void returnPort(unsigned short int portToClose){
+	unsigned short int numRetiredPorts(){
+		return retiredPorts.size();
+	}
+
+	void retirePort(unsigned short int portToClose){
 		if (portsInUse.find(portToClose) == portsInUse.end()) return;
 		portsInUse.erase(portToClose);
 		retiredPorts.push_back(portToClose);
@@ -65,6 +75,9 @@ public:
 				highest--;
 			}
 		}
+
+		printf("Number of services running: %u\n", portsInUse.size());
+		printf("Number of retired ports available: %u\n\n", retiredPorts.size());
 	};
 };
 
