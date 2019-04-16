@@ -76,8 +76,8 @@ public:
 			}
 		}
 
-		printf("Number of services running: %u\n", portsInUse.size());
-		printf("Number of retired ports available: %u\n\n", retiredPorts.size());
+		printf("Number of services running: %lu\n", portsInUse.size());
+		printf("Number of retired ports available: %lu\n\n", retiredPorts.size());
 	};
 };
 
