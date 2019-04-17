@@ -12,10 +12,12 @@
 
 class NetworkNode {
 	std::string name;
-	int socketfd;
 	struct sockaddr_in serverAddr;
+
+protected:
 	unsigned short int port;
 	NetworkState* netstate;
+	int socketfd;
 
 public:
 	NetworkNode(std::string name = ""){
@@ -42,16 +44,13 @@ public:
 				perror("Error attempting to bind to socket");
 				return;
 			}
-			if (listen(socketfd, 5) == 0) {
-				printf("Server successfully setup on port %hu\n", port);
-			};	//setting backlog queue to max size of 5
-
+			listen(socketfd, 5);	//setting backlog queue to max size of 5
 	};
 
-	void print(){
-		printf("Node name: %s\n", name.c_str());
-		printf("Node setup on port: %hu\n", port);
-	}
+	//Virtual function delegating actions while running server
+	virtual void runServer(){};
+
+	virtual void print(){};
 
 	~NetworkNode(){};
 };

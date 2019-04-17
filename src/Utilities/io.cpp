@@ -13,4 +13,3 @@ void* parseInput(int &argc, char** argv, int argsExpected = -1){
 
 	return retrievePort(1, argv);
 }
-
