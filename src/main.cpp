@@ -1,20 +1,11 @@
 #include <iostream>
-#include "NetworkManager.hpp"
+#include <cstdio>
+#include "Networking/Interfaces/NetworkNode.cpp"
 
-int main(int argc, char** argv){
-  std::cout<<"******Starting cpp-smtp server*****\n\n";
+int main(int argc, char** argv) {
+	std::cout<<"******Setting up cpp-smtp program*****\n\n";
+  	NetworkNode *node = new NetworkNode("Test-Service");
+  	node->startServer();
 
-  if (argc < 2) {
-    std::cout<<"Input improper number of arguments. Please include a port number\n\n";
-    return -1;
-  } else if (argc > 2) {
-    std::cout<<"Excessive number of arguments. Please include a single port number.\n\n";
-    return -1;
-  }
-
-  NetworkManager netman;
-  netman.setPort(argv[1]);
-  netman.listen();
-
-  return 0;
+	return 0;
 }
