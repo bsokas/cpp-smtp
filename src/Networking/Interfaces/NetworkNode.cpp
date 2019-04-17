@@ -42,7 +42,10 @@ public:
 				perror("Error attempting to bind to socket");
 				return;
 			}
-			listen(socketfd, 5);	//setting backlog queue to max size of 5
+			if (listen(socketfd, 5) == 0) {
+				printf("Server successfully setup on port %hu\n", port);
+			};	//setting backlog queue to max size of 5
+
 	};
 
 	void print(){

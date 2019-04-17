@@ -3,7 +3,6 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 
-
 //Sets required values for server startup
 void prepPort(struct sockaddr_in &serverAddress, unsigned short int &port) {
   serverAddress.sin_family = AF_INET;
