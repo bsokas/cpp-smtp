@@ -5,6 +5,7 @@
 #include <unistd.h>
 
 #include "../Interfaces/NetworkNode.cpp"
+#define DEFAULT_MSG "Simple Server message"
 
 class SimpleServer: public NetworkNode {
   std::string serverName;
@@ -34,9 +35,10 @@ public:
     while(1) {
       clientfd = accept(socketfd, (struct sockaddr *) &clientAddr, &clientAddrSize);
       if (clientfd < 0) {
-        perror("Simple server encountered attempting to accept connection\n");
+        perror("Simple server encountered error attempting to accept connection\n");
       }
-      simpleReader(clientfd, buffer);
+      // simpleReader(clientfd, buffer);
+      respond(clientfd);
     }
   };
 
@@ -55,6 +57,21 @@ public:
       printf("Incoming Message: \n%s\n", bufferStart);
       return 0;
   };
+
+  void respond(int &clientfd){
+    try {
+      // std::string html = "<html><header><body><h1>Here's some text</h1></body></header></html>";
+      // size_t htmlLength = sizeof(html);
+      int written = write(clientfd, DEFAULT_MSG, sizeof(DEFAULT_MSG));
+
+      if (written <= 0) throw "Unable to write to client\n";
+
+      printf("Simple Server wrote default message\n");
+    } catch (std::exception e) {
+        printf("Error writing to socket: %s\n", e.what());
+        return;
+    }
+  }
 
   void print(){
     printf("Simple server %s setup on port %hu\n", serverName.c_str(), port);
