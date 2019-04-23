@@ -1,4 +1,6 @@
 #include <string>
+#include <iostream>
+#include <fstream>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -9,11 +11,13 @@
 
 class SimpleServer: public NetworkNode {
   std::string serverName;
+  std::string indexPath;
   unsigned short int defaultBufferSize;
 
 public:
   SimpleServer(std::string serverName){
-    defaultBufferSize = 2048;
+    defaultBufferSize = 300;
+    indexPath = "UI/index.html";
     this->serverName = serverName;
     this->port = this->netstate->getNetworkPort(serverName);
   };
@@ -37,7 +41,7 @@ public:
       if (clientfd < 0) {
         perror("Simple server encountered error attempting to accept connection\n");
       }
-      // simpleReader(clientfd, buffer);
+
       respond(clientfd);
     }
   };
@@ -60,12 +64,13 @@ public:
 
   void respond(int &clientfd){
     try {
-      // std::string html = "<html><header><body><h1>Here's some text</h1></body></header></html>";
-      // size_t htmlLength = sizeof(html);
-      int written = write(clientfd, DEFAULT_MSG, sizeof(DEFAULT_MSG));
+      std::fstream indexFile;
+      indexFile.open(indexPath, std::ios::in);
+      char buffer[defaultBufferSize];
+      indexFile.read(buffer, defaultBufferSize);
 
+      int written = write(clientfd, buffer, defaultBufferSize);
       if (written <= 0) throw "Unable to write to client\n";
-
       printf("Simple Server wrote default message\n");
     } catch (std::exception e) {
         printf("Error writing to socket: %s\n", e.what());
