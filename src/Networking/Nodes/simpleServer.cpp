@@ -16,7 +16,7 @@ class SimpleServer: public NetworkNode {
 
 public:
   SimpleServer(std::string serverName){
-    defaultBufferSize = 300;
+    defaultBufferSize = 420;
     indexPath = "UI/index.html";
     this->serverName = serverName;
     this->port = this->netstate->getNetworkPort(serverName);
