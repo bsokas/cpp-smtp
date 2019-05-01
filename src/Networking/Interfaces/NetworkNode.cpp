@@ -52,5 +52,7 @@ public:
 
 	virtual void print(){};
 
-	~NetworkNode(){};
+	~NetworkNode(){
+		shutdown(socketfd, SHUT_RDWR);
+	};
 };
