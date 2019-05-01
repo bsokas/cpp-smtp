@@ -11,21 +11,29 @@ class PathServer: public NetworkNode {
 public:
   PathServer(std::string serverName){
     this->serverName = serverName;
-  }
+  };
 
   void runServer(){
     startServer();
     pathListener();
-  }
+  };
 
   void pathListener(){
     while (1) {
-      struct sockaddr_in *clientAddr;
-      int clientfd = recvmsg(socketfd, (struct sockaddr *) clientAddr, MSG_PEEK);
-      if (clientfd > 0) {
-        printf ("Incoming msg w/ length: %d", clientfd);
+      // struct sockaddr_in *clientAddr;
+      struct msghdr header;
+      int msglen = recvmsg(socketfd, &header, MSG_PEEK);
+      if (msglen > 0) {
+        printf ("Incoming msg w/ length: %d", msglen);
+      } else {
+        printf("Incoming msg registered as %d\n", msglen);
+        return;
       }
     }
+  };
+
+  void print(){
+    printf("Path Server %s has port %hu reserved\n", serverName.c_str(), port);
   }
 
-}
+};

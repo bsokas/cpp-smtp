@@ -19,7 +19,6 @@ public:
     defaultBufferSize = 420;
     indexPath = "UI/index.html";
     this->serverName = serverName;
-    this->port = this->netstate->getNetworkPort(serverName);
   };
 
   void runServer(){
